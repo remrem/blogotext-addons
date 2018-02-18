@@ -254,9 +254,11 @@ function a_url_rewrite_db_write($path)
  */
 function a_url_rewrite_on_boot()
 {
-    if (!isset($_GET[$GLOBALS['addon_url_rewrite']['url_article']]) // request article ?
-     || !a_url_rewrite_init() // load db
-    ) {
+    if (!a_url_rewrite_init()) {
+        return true;
+    }
+    // test url
+    if (!isset($_GET[$GLOBALS['addon_url_rewrite']['url_article']])) {
         return true;
     }
 
