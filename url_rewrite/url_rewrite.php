@@ -8,6 +8,9 @@
 /**
  * Changelog
  *
+ * 1.0.1 2018/02/18 @RemRem
+ *  - Fix change URL params in settings break the addon
+ *
  * 1.0.0 2018/02/15 @RemRem
  *  - first release
  */
