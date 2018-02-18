@@ -10,6 +10,7 @@
  *
  * 1.0.1 2018/02/18 @RemRem
  *  - Fix change URL params in settings break the addon
+ *  - Fix add URL in parsing HTML content
  *
  * 1.0.0 2018/02/15 @RemRem
  *  - first release
@@ -123,14 +124,16 @@ function a_url_rewrite_converter_html($hook_datas)
         $regex,
         function($found)
         {
-            return 'href='.$found['1'].URL_ROOT.'?'.$GLOBALS['addon_url_rewrite']['url_article'].'='.a_url_rewrite_slug($found['3']).$found['1'];
+            $new_url = a_url_rewrite_slug($found['3']);
+            $GLOBALS['addon_url_rewrite']['db'][$new_url] = $found['3'];
+            return 'href='.$found['1'].URL_ROOT.'?'.$GLOBALS['addon_url_rewrite']['url_article'].'='.$new_url.$found['1'];
         },
         $hook_datas['1']
     );
 
     // new url found ?
     if ($db_count != count($GLOBALS['addon_url_rewrite']['db'])) {
-        a_url_rewrite_db_build();
+        a_url_rewrite_db_write();
     }
 
     return $hook_datas;
@@ -208,10 +211,7 @@ function a_url_rewrite_init()
  */
 function a_url_rewrite_db_build()
 {
-    a_url_rewrite_init();
-
-    // blog article
-    $db_article = addon_get_vhost_cache_path('url_rewrite').'/db_urls_articles.php';
+    // a_url_rewrite_init();
 
     /* work on article */
     // list all articles url (older to newer)
@@ -236,16 +236,16 @@ function a_url_rewrite_db_build()
     }
 
     // write the file
-    $article_writed = a_url_rewrite_db_write($db_article);
+    $article_writed = a_url_rewrite_db_write();
 }
 
 /**
  * write the addon db
  */
-function a_url_rewrite_db_write($path)
+function a_url_rewrite_db_write()
 {
     // return (file_put_contents($path, serialize($db)) !== false);
-    return (file_put_contents($path, json_encode($GLOBALS['addon_url_rewrite']['db'], JSON_PRETTY_PRINT)) !== false);
+    return (file_put_contents($GLOBALS['addon_url_rewrite']['db_path'], json_encode($GLOBALS['addon_url_rewrite']['db'], JSON_PRETTY_PRINT)) !== false);
 }
 
 /**
