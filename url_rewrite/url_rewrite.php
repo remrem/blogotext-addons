@@ -40,7 +40,7 @@ $declaration = array(
 
     'url' => 'https://blogotext.org/',
 
-    'version' => '1.0.0',
+    'version' => '1.0.1',
     'compliancy' => '3.7',
 
     'settings' => array(
