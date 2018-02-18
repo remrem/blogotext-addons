@@ -251,14 +251,14 @@ function a_url_rewrite_db_write($path)
  */
 function a_url_rewrite_on_boot()
 {
-    if (!isset($_GET['article']) // request article ?
+    if (!isset($_GET[$GLOBALS['addon_url_rewrite']['url_article']]) // request article ?
      || !a_url_rewrite_init() // load db
     ) {
         return true;
     }
 
     // sanitize the requested URL
-    $addon_url = htmlspecialchars($_GET['article'], ENT_QUOTES);
+    $addon_url = htmlspecialchars($_GET[$GLOBALS['addon_url_rewrite']['url_article']], ENT_QUOTES);
 
     // check if in the addon db
     if (!isset($GLOBALS['addon_url_rewrite']['db'][$addon_url])) {
